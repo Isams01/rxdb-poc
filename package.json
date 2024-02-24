@@ -4,8 +4,10 @@
   "description": "rxdb POC",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "test": "jest --runInBand --detectOpenHandles",
+    "build": "npm-run-all lint build:tsc",
+    "build:tsc": "tsc",
+    "lint": "eslint --max-warnings 0 ."
   },
   "repository": {
     "type": "git",
@@ -18,16 +20,24 @@
   },
   "homepage": "https://github.com/Isams01/rxdb-poc#readme",
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.12",
+    "@types/lodash": "^4.14.202",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "npm-run-all": "^4.1.5",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "rxdb": "^15.9.1"
+    "axios": "^1.6.7",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "rxdb": "^15.9.1",
+    "rxjs": "^7.8.1"
   }
 }

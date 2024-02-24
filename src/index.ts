@@ -5,6 +5,8 @@ import axios from 'axios';
 import _ from 'lodash';
 import { Subject } from 'rxjs';
 
+// see this link for help https://rxdb.info/replication-http.html#push-from-the-client-to-the-server
+
 interface Checkpoint {
   lastUpdate: Date;
   lastId: string | undefined;
@@ -15,6 +17,7 @@ interface DocType {
   firstName: string;
   lastName: string;
   age: number;
+  updated: string; // iso 8601 string
 }
 
 // const pullEndpoint = 'http://localhost:3000/pull';
@@ -88,9 +91,7 @@ export async function createDatabaseAndReplication(
     deletedField: '_deleted',
     push: {
       async handler(docs) {
-        console.log('sending docs to server', docs);
         const rawResponse = await axios.post(pushUrl, docs);
-        console.log(rawResponse.data);
         const response = rawResponse.data;
         return response;
       },

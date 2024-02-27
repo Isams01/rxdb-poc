@@ -27,7 +27,7 @@ const pullStream$ = new Subject<
   RxReplicationPullStreamItem<{ passportId: string }[], Checkpoint>
 >();
 
-const humansSchema = {
+export const humansSchema = {
   title: 'human schema',
   version: 0,
   primaryKey: 'passportId',

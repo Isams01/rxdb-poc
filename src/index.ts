@@ -1,6 +1,7 @@
 import { RxReplicationPullStreamItem, createRxDatabase } from 'rxdb';
 import { getRxStorageMemory } from 'rxdb/plugins/storage-memory';
 import { replicateRxCollection } from 'rxdb/plugins/replication';
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import axios from 'axios';
 import _ from 'lodash';
 import { Subject } from 'rxjs';
@@ -42,6 +43,10 @@ const humansSchema = {
     lastName: {
       type: 'string',
     },
+    updated: {
+      type: 'string',
+      final: true, // try this. What you are looking for is the client cannot set this.
+    },
     age: {
       description: 'age in years',
       type: 'integer',
@@ -59,7 +64,7 @@ export const createDB = async () => {
   const db = await createRxDatabase({
     name: 'heroesdb',
     multiInstance: true,
-    storage: getRxStorageMemory(),
+    storage: wrappedValidateAjvStorage({ storage: getRxStorageMemory() }),
     ignoreDuplicate: true,
   });
 
@@ -78,7 +83,6 @@ export async function createDatabaseAndReplication(
 ) {
   const db = await createDB();
   if (docsToInsert) {
-    console.log('inserting docs');
     await db.humans.bulkInsert(docsToInsert);
   }
   const repState = replicateRxCollection({
